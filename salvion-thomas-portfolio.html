@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salvion Thomas — Electronics & Instrumentation, AI & Autonomy</title>
+<meta name="description" content="Portfolio of Salvion Thomas — Electronics & Instrumentation Engineering student, AI & Autonomy engineer, and designer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0d0b;
+  --bg-2:#14130f;
+  --card:#161511;
+  --line:#2a2822;
+  --cream:#efe9dc;
+  --cream-dim:#9b968a;
+  --muted:#7d786d;
+  --gold:#c9a35c;
+  --gold-soft:rgba(201,163,92,.35);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'Space Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:var(--sans);font-weight:300;line-height:1.65;overflow-x:hidden}
+::selection{background:var(--gold);color:#141310}
+a{color:var(--gold);text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+@media(max-width:640px){.wrap{padding:0 22px}}
+
+/* ================= LOADER ================= */
+#loader{position:fixed;inset:0;z-index:200;background:#0b0a08;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .9s ease,visibility .9s}
+#loader.done{opacity:0;visibility:hidden}
+#loader h1{font-family:var(--serif);font-weight:500;font-size:clamp(2.6rem,8vw,5.4rem);letter-spacing:.01em;color:var(--cream);opacity:0;transform:translateY(24px);animation:loadIn 1.1s .2s ease forwards}
+#loader p{font-family:var(--mono);font-size:clamp(.6rem,1.4vw,.78rem);letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin-top:22px;opacity:0;animation:loadIn 1.1s .7s ease forwards}
+#loader .count{position:absolute;right:44px;bottom:34px;font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+@keyframes loadIn{to{opacity:1;transform:none}}
+
+/* ================= NAV ================= */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,13,11,.82);backdrop-filter:blur(12px);border-bottom:1px solid rgba(42,40,34,.6)}
+.nav-in{max-width:1200px;margin:0 auto;padding:20px 40px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--serif);font-size:1.25rem;font-weight:500;color:var(--cream)}
+.brand i{font-style:normal;color:var(--gold)}
+.nav-links{display:flex;gap:34px;align-items:center}
+.nav-links a{font-family:var(--sans);font-weight:400;font-size:.92rem;color:var(--cream-dim);transition:color .25s}
+.nav-links a:hover{color:var(--cream)}
+.nav-links a.in-link{font-weight:500;color:var(--cream-dim)}
+@media(max-width:760px){.nav-links{gap:18px}.nav-links a{font-size:.8rem}.nav-links a:nth-child(n+5){display:none}}
+
+/* ================= HERO ================= */
+header{position:relative;min-height:100vh;display:flex;align-items:flex-start;overflow:hidden}
+#stars{position:absolute;inset:0;z-index:0}
+
+/* hero layout */
+.hero-in{position:relative;z-index:2;width:100%;padding-top:80px;padding-bottom:60px}
+
+/* top bar inside wrap */
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:0;flex-wrap:wrap}
+.hero-left{flex:1;min-width:200px}
+.hero-right-info{font-family:var(--sans);font-size:.78rem;color:var(--muted);text-align:right;line-height:1.7;max-width:26ch}
+
+/* ── name + photo zone: full viewport width ── */
+.hero-name-photo{
+  position:relative;
+  width:100%;
+  height:clamp(380px,72vh,700px);
+  overflow:visible;
+  margin-top:16px;
+}
+
+/* name text: covers full zone width, text centered, behind photo */
+h1.hero-name{
+  position:absolute;
+  top:0;left:0;right:0;
+  text-align:center;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:clamp(5rem,19vw,18rem);
+  line-height:.9;
+  letter-spacing:-.02em;
+  margin:0;
+  z-index:1;
+  pointer-events:none;
+  user-select:none;
+  white-space:nowrap;
+}
+h1.hero-name .l1{display:block;color:var(--cream)}
+h1.hero-name .l2{display:block;color:rgba(201,163,92,.55);font-style:italic;font-weight:500}
+
+/* photo: centered, anchored to bottom of zone, sits in front of name */
+.hero-photo-wrap{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:3;
+  pointer-events:none;
+  line-height:0;
+}
+.hero-photo-wrap img{
+  display:block;
+  height:clamp(320px,60vh,600px);
+  width:auto;
+  max-width:none;
+  filter:grayscale(15%) contrast(1.07);
+  animation:photoIn 1.1s .35s ease both;
+}
+@keyframes photoIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── below-photo content ── */
+.hero-below{
+  position:relative;
+  z-index:5;
+  text-align:center;
+  padding-top:28px;
+}
+.hero-tag{
+  font-size:clamp(.95rem,1.8vw,1.25rem);
+  font-weight:300;
+  color:#c9c4b8;
+  max-width:46ch;
+  line-height:1.6;
+  margin:0 auto 32px;
+}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.eyebrow+.eyebrow{margin-top:7px;color:#6b665c}
+
+.pill{display:inline-block;font-family:var(--sans);font-weight:400;font-size:.92rem;padding:13px 28px;border-radius:999px;transition:transform .25s,background .25s,color .25s}
+.pill:hover{transform:translateY(-2px)}
+.pill.solid{background:var(--cream);color:#141310}
+.pill.gold{border:1px solid var(--gold);color:var(--gold)}
+.pill.gold:hover{background:rgba(201,163,92,.1)}
+.pill.dim{border:1px solid var(--line);color:var(--cream)}
+.pill.dim:hover{border-color:var(--cream-dim)}
+
+.hero-foot{
+  margin-top:28px;
+  font-family:var(--mono);
+  font-size:.65rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-top:1px solid var(--line);
+  padding-top:18px;
+}
+
+.scroll-hint{position:absolute;right:44px;bottom:36px;z-index:6;width:34px;height:34px;border:1px solid var(--gold-soft);border-radius:50%;animation:pulse 3s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.15);opacity:.3}}
+
+@media(max-width:700px){
+  h1.hero-name{font-size:clamp(3.2rem,21vw,7rem)}
+  .hero-photo-wrap img{height:clamp(240px,50vh,380px)}
+  .hero-name-photo{height:clamp(280px,56vh,500px)}
+  .hero-right-info{display:none}
+  .scroll-hint{display:none}
+}
+
+/* ================= SECTIONS ================= */
+section{padding:120px 0 20px;position:relative;z-index:2}
+.sec-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.sec-eyebrow::after{content:"";width:44px;height:1px;background:var(--gold-soft)}
+h2.sec-title{font-family:var(--serif);font-weight:500;font-size:clamp(2rem,5vw,3.4rem);line-height:1.12;max-width:20ch;margin-bottom:56px}
+h2.sec-title em{font-style:italic;color:#8d887c}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:64px;align-items:start}
+.about-grid p{color:var(--cream-dim);font-size:1.06rem;margin-bottom:18px}
+.about-grid p strong{color:var(--cream);font-weight:500}
+.facts{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.fact{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.fact .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.fact .v{font-family:var(--serif);font-size:1.35rem;color:var(--gold);white-space:nowrap}
+
+/* experience */
+.xp{border-top:1px solid var(--line)}
+.xp-row{display:grid;grid-template-columns:180px 1fr;gap:36px;padding:44px 0;border-bottom:1px solid var(--line)}
+.xp-when{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding-top:8px}
+.xp-row h3{font-family:var(--serif);font-weight:500;font-size:1.55rem;line-height:1.25}
+.xp-org{font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:8px 0 16px}
+.xp-row p{color:var(--cream-dim);font-size:1rem;max-width:68ch;margin-bottom:10px}
+
+/* compact cert thumb in experience */
+.xp-cert-thumb{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:16px;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:8px;overflow:hidden;
+  cursor:zoom-in;
+  transition:border-color .25s;
+  max-width:260px;
+}
+.xp-cert-thumb:hover{border-color:var(--gold-soft)}
+.xp-cert-thumb img{
+  width:80px;height:54px;
+  object-fit:cover;
+  flex-shrink:0;
+  filter:brightness(.88) saturate(.75);
+  transition:filter .3s;
+}
+.xp-cert-thumb:hover img{filter:brightness(1) saturate(1)}
+.xp-cert-thumb-label{
+  padding:0 14px 0 4px;
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  line-height:1.5;
+}
+.xp-cert-thumb-label strong{
+  display:block;
+  color:var(--gold);
+  font-size:.65rem;
+  margin-bottom:2px;
+}
+
+/* projects */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 28px 26px;display:flex;flex-direction:column;gap:14px;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-4px);border-color:var(--gold-soft)}
+.card .num{position:absolute;top:22px;right:26px;font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.card .award{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-soft);border-radius:999px;padding:5px 13px;align-self:flex-start}
+.card .award.plain{color:var(--muted);border-color:var(--line)}
+.card h3{font-family:var(--serif);font-weight:500;font-size:1.45rem;line-height:1.25;padding-right:34px}
+.card .meta{font-size:.88rem;color:var(--muted)}
+.card .meta b{font-family:var(--serif);font-weight:500;font-size:1.15rem;color:var(--gold);margin-right:6px}
+.card p.desc{color:var(--cream-dim);font-size:.95rem;flex:1}
+.card .tags{display:flex;flex-wrap:wrap;gap:8px}
+.card .tags span{font-size:.76rem;font-weight:400;color:var(--cream-dim);background:#1d1c17;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+
+/* certificate image inside card */
+.card-cert-img{
+  width:100%;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  margin-top:4px;
+  position:relative;
+}
+.card-cert-img img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
+  transition:transform .4s ease;
+  filter:brightness(.92) saturate(.9);
+}
+.card:hover .card-cert-img img{transform:scale(1.03);filter:brightness(1) saturate(1)}
+.card-cert-img .cert-label{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(14,13,11,.88));
+  padding:18px 14px 10px;
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+
+/* SDG badges */
+.sdg-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.sdg-tag{font-size:.55rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--cream-dim);line-height:1.7;white-space:nowrap;}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.skill{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:32px 28px}
+.skill h3{font-family:var(--mono);font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.skill ul{list-style:none}
+.skill li{color:var(--cream-dim);font-size:.98rem;padding:7px 0;border-bottom:1px dashed rgba(42,40,34,.7)}
+.skill li:last-child{border-bottom:0}
+
+/* certs */
+.certs{columns:2;column-gap:22px}
+.cert{break-inside:avoid;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:22px;transition:border-color .3s}
+.cert:hover{border-color:var(--gold-soft)}
+.cert-img{width:100%;height:120px;overflow:hidden}
+.cert-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.88) saturate(.8);transition:transform .4s ease,filter .4s ease}
+.cert:hover .cert-img img{transform:scale(1.05);filter:brightness(.98) saturate(1)}
+.cert-body{padding:16px 20px 18px}
+.cert b{display:block;font-family:var(--serif);font-weight:500;font-size:1.05rem;color:var(--cream);margin-bottom:4px}
+.cert span{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:720px){.certs{columns:1}}
+
+/* ── lightbox ── */
+.cert{cursor:pointer;position:relative}
+.cert-img{position:relative}
+
+/* card-cert-img also clickable */
+.card-cert-img{cursor:zoom-in}
+
+/* lightbox overlay */
+#lightbox{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(8,7,5,.94);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease;
+}
+#lightbox.open{opacity:1;pointer-events:all}
+#lightbox-img{
+  max-width:min(860px,92vw);
+  max-height:86vh;
+  width:auto;height:auto;
+  border-radius:12px;
+  border:1px solid var(--line);
+  box-shadow:0 0 80px rgba(0,0,0,.7);
+  transform:scale(.9);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+  object-fit:contain;
+}
+#lightbox.open #lightbox-img{transform:scale(1)}
+#lightbox-caption{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);
+  white-space:nowrap;
+}
+#lightbox-close{
+  position:absolute;top:22px;right:26px;
+  width:40px;height:40px;
+  border:1px solid var(--gold-soft);
+  border-radius:50%;
+  background:rgba(14,13,11,.6);
+  color:var(--cream);font-size:1.2rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s;
+  z-index:10;
+}
+#lightbox-close:hover{background:rgba(201,163,92,.15);border-color:var(--gold)}
+
+/* contact */
+#contact{padding-bottom:60px}
+.contact-inner{text-align:center;padding:40px 0 10px}
+.contact-inner .sec-eyebrow{justify-content:center}
+.contact-inner .sec-eyebrow::before{content:"";width:44px;height:1px;background:var(--gold-soft)}
+.contact-inner h2{margin-left:auto;margin-right:auto;margin-bottom:22px}
+.contact-inner p{color:var(--cream-dim);max-width:46ch;margin:0 auto 40px}
+.contact-cta{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+
+footer{border-top:1px solid var(--line);padding:30px 0 40px;position:relative;z-index:2}
+.foot-in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.foot-in .serif{font-family:var(--serif);color:var(--cream-dim)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .scroll-hint{animation:none}
+  #loader h1,#loader p{animation:none;opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+@media(max-width:820px){
+  .about-grid{grid-template-columns:1fr;gap:44px}
+  .xp-row{grid-template-columns:1fr;gap:6px;padding:36px 0}
+  .scroll-hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Certificate viewer">
+  <button id="lightbox-close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+  <span id="lightbox-caption"></span>
+</div>
+
+<div id="loader" aria-hidden="true">
+  <h1>Salvion Thomas</h1>
+  <p>Electronics &amp; Instrumentation, AI &amp; Autonomy, Design</p>
+  <div class="count" id="loadCount">0</div>
+</div>
+
+<nav>
+  <div class="nav-in">
+    <div class="brand">Salvion Thomas<i>.</i></div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#competitions">Competitions</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+      <a class="in-link" href="https://www.linkedin.com/in/salvion-thomas-15a127278" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+    </div>
+  </div>
+</nav>
+
+<header id="home">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="hero-in">
+
+    <!-- top bar: inside wrap for padding -->
+    <div class="wrap">
+      <div class="hero-top">
+        <div class="hero-left">
+          <p class="eyebrow">Thrissur, Kerala — India</p>
+          <p class="eyebrow">EIE&nbsp;&nbsp;/&nbsp;&nbsp;AI &amp; Autonomy&nbsp;&nbsp;/&nbsp;&nbsp;Embedded&nbsp;&nbsp;/&nbsp;&nbsp;Design</p>
+        </div>
+        <p class="hero-right-info">Engineering autonomous systems<br>and industrial instrumentation —<br>with an eye for design.</p>
+      </div>
+    </div>
+
+    <!-- FULL-WIDTH: name + photo overlay -->
+    <div class="hero-name-photo">
+      <h1 class="hero-name">
+        <span class="l1">Salvion</span>
+        <span class="l2">Thomas</span>
+      </h1>
+      <div class="hero-photo-wrap">
+        <img src="Salvion Thomas.png" alt="Salvion Thomas" draggable="false">
+      </div>
+    </div>
+
+    <!-- bottom content: inside wrap for padding -->
+    <div class="wrap">
+      <div class="hero-below">
+        <p class="hero-tag">Engineering autonomous systems and industrial instrumentation — with an eye for design.</p>
+        <div class="hero-cta">
+          <a class="pill solid" href="#work">View work</a>
+          <a class="pill gold" href="mailto:salvionthomas23@gmail.com">Get in touch</a>
+          <a class="pill dim" href="https://www.linkedin.com/in/salvion-thomas-15a127278" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+        <p class="hero-foot">IRC 2026 Finalist &nbsp;·&nbsp; Two-time Hackathon Champion &nbsp;·&nbsp; SmartEarth 2026 Finalist, Kazakhstan</p>
+      </div>
+    </div>
+
+  </div>
+  <div class="scroll-hint"></div>
+</header>
+
+<section id="competitions">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Competitions &amp; Awards</p>
+    <h2 class="sec-title reveal">Competing, pitching, and <em>winning.</em></h2>
+    <div class="cards">
+      <div class="card reveal">
+        <span class="num">01</span>
+        <span class="award">1st Prize · ISA Competition</span>
+        <h3>AI Metro Ticketing Software</h3>
+        <p class="meta"><b>1st</b> at the International Society of Automation competition, IACT-Manipal 2026</p>
+        <p class="desc">AI-driven automated ticketing solution designed for Bengaluru Metro Rail Corporation Ltd (BMRCL). Awarded for technical innovation and real-world system architecture. Role: Lead Software Architect.</p>
+        <div class="card-cert-img">
+          <img src="ai ticket.jpg" alt="AI Metro Ticketing — ISA 1st Prize">
+          <span class="cert-label">ISA Competition · 1st Prize</span>
+        </div>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 9 · Innovation</span><span class="sdg-tag">SDG 11 · Sustainable Cities</span></div>
+        <div class="tags"><span>AI / UX</span><span>System Architecture</span><span>Python</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">02</span>
+        <span class="award">1st Prize · KAU Youth Hackathon</span>
+        <h3>Smart-Candle — Egg Candling System</h3>
+        <p class="meta"><b>1st</b> at Kerala Agricultural University Youth Hackathon 2026</p>
+        <p class="desc">Egg-candling prototype with automated sensor and vision arrays to check egg viability for the agricultural incubation sector — awarded for execution speed and engineering feasibility.</p>
+        <div class="card-cert-img">
+          <img src="kau youth.jpg" alt="KAU Youth Hackathon 1st Prize">
+          <span class="cert-label">KAU Youth Hackathon · 1st Prize</span>
+        </div>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 2 · Zero Hunger</span><span class="sdg-tag">SDG 9 · Innovation</span></div>
+        <div class="tags"><span>Embedded</span><span>Computer Vision</span><span>Sensors</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">03</span>
+        <span class="award">Rover · IRC 2026 Finalist</span>
+        <h3>Rover "Dawn" — Autonomous Navigation</h3>
+        <p class="meta"><b>Finalist</b> International Rover Challenge 2026, FISAT Rover Team</p>
+        <p class="desc">Engineered autonomous navigation sub-systems and integrated AI components for the team's custom-built rover; also built the official team web platform for international review.</p>
+        <div class="card-cert-img">
+          <img src="dawn.jpg" alt="Rover Dawn — IRC 2026 Finalist">
+          <span class="cert-label">Rover Dawn · IRC 2026 Finalist</span>
+        </div>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 9 · Innovation</span><span class="sdg-tag">SDG 17 · Partnerships</span></div>
+        <div class="tags"><span>ROS</span><span>Autonomy</span><span>Web Platform</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">04</span>
+        <span class="award">2nd Prize · National Space Week</span>
+        <h3>Space Exploration Research</h3>
+        <p class="meta"><b>2nd</b> Space Presentation Competition, Echo Club FISAT 2025</p>
+        <p class="desc">Deep technical research and data analysis on advanced space exploration technologies, orbital mechanics, and mission architectures.</p>
+        <div class="card-cert-img">
+          <img src="isro.jpg" alt="Space Exploration Research — 2nd Prize">
+          <span class="cert-label">National Space Week · 2nd Prize</span>
+        </div>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 4 · Quality Education</span><span class="sdg-tag">SDG 9 · Innovation</span></div>
+        <div class="tags"><span>Research</span><span>Data Analysis</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">05</span>
+        <span class="award">Finalist · SmartEarth Hackathon 2026</span>
+        <h3>2nd SmartEarth Hackathon — Sustainability Innovation</h3>
+        <p class="meta"><b>Finalist</b> · 2nd SmartEarth Hackathon, Nazarbayev University, Kazakhstan · June 2026</p>
+        <p class="desc">Competed in a 48-hour international innovation sprint at CEMRR, Nazarbayev University, Kazakhstan — co-organised with Qaz.AI. Developed a technology-enabled environmental solution addressing climate monitoring and sustainability challenges specific to Central Asia, competing against graduate and undergraduate teams worldwide.</p>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 11 · Sustainable Cities</span><span class="sdg-tag">SDG 13 · Climate Action</span><span class="sdg-tag">SDG 15 · Life on Land</span></div>
+        <div class="tags"><span>Climate Tech</span><span>AI</span><span>Sustainability</span><span>48-hr Hackathon</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">06</span>
+        <span class="award">Runner-up · Spot Ideathon iACT’26</span>
+        <h3>Spot Ideathon — Energy Conservation Pitch</h3>
+        <p class="meta"><b>Runner-up</b> · ISA Spot Ideathon, i-ACT’26 Annual Student Convention, MIT Manipal</p>
+        <p class="desc">Secured 2nd place at the ISA (International Society of Automation) Spot Ideathon held during i-ACT’26. Pitched an innovative <strong>Energy Conservation</strong> solution addressing modern energy efficiency challenges — applying core Electronics &amp; Instrumentation engineering principles to a global sustainability problem. Team: Adarsh CV, Joel Poulose, Harshal K, Salvion T.</p>
+        <div class="card-cert-img">
+          <img src="ideathon.jpg" alt="ISA i-ACT’26 Runner-up Certificate of Achievement">
+          <span class="cert-label">Certificate of Achievement · ISA &amp; MIT Manipal</span>
+        </div>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 7 · Clean Energy</span><span class="sdg-tag">SDG 13 · Climate Action</span></div>
+        <div class="tags"><span>Idea Pitching</span><span>Energy Conservation</span><span>Sustainability</span><span>ISA</span><span>GreenTech</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">07</span>
+        <span class="award">Pre-finalist · AtomQuest 2024</span>
+        <h3>AtomQuest 2024 — Tech Competition</h3>
+        <p class="meta"><b>Pre-finalist</b> · AtomQuest 2024, Flagship Tech Competition by Atomberg Technologies</p>
+        <p class="desc">Advanced to the pre-finals of AtomQuest 2024, a highly competitive national-level tech competition organised by Atomberg Technologies. Demonstrated technical aptitude and problem-solving skills to clear early rounds and reach the pre-finalist stage among a large national pool of engineering participants.</p>
+        <div class="card-cert-img">
+          <img src="atomquest.jpg" alt="AtomQuest 2024 Pre-finalist Certificate">
+          <span class="cert-label">AtomQuest 2024 · Atomberg Technologies</span>
+        </div>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 7 · Clean Energy</span><span class="sdg-tag">SDG 9 · Innovation</span></div>
+        <div class="tags"><span>Tech Competition</span><span>Pre-finalist</span><span>Atomberg</span><span>National Level</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Projects</p>
+    <h2 class="sec-title reveal">Academic builds and <em>prototypes.</em></h2>
+    <div class="cards">
+      <div class="card reveal">
+        <span class="num">01</span>
+        <span class="award plain">Academic · S4 Micro-Project</span>
+        <h3>Water pH Analyser using 8051</h3>
+        <p class="desc">Localised water testing device built on an 8051 microcontroller interfaced with an analog-to-digital converter and a calibrated pH sensor.</p>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 6 · Clean Water</span></div>
+        <div class="tags"><span>8051</span><span>ADC</span><span>pH Sensing</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">02</span>
+        <span class="award plain">Academic · S3 Micro-Project</span>
+        <h3>Automated Water Analyser for Aquaponics</h3>
+        <p class="desc">Automated water-quality monitoring system using an Arduino microcontroller and calibrated pH sensors to track aquatic ecosystems in real time.</p>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 2 · Zero Hunger</span><span class="sdg-tag">SDG 6 · Clean Water</span><span class="sdg-tag">SDG 14 · Life Below Water</span></div>
+        <div class="tags"><span>Arduino</span><span>Real-time Monitoring</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">03</span>
+        <span class="award plain">Academic · S2 Micro-Project</span>
+        <h3>Department Web Application</h3>
+        <p class="desc">Dedicated department web application focused on clean user-interface design and responsive layout functionality.</p>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 4 · Quality Education</span><span class="sdg-tag">SDG 9 · Innovation</span></div>
+        <div class="tags"><span>HTML</span><span>UI Design</span><span>Responsive</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">04</span>
+        <span class="award plain">Academic · S3 ML Project</span>
+        <h3>Water Sensor Data Quality Analysis</h3>
+        <p class="desc">Applied machine learning models to analyse and validate water quality data sourced from pH sensors. Processed real-world sensor readings to detect anomalies, classify water quality grades, and benchmark model accuracy — bridging embedded sensing with data-driven decision-making.</p>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 6 · Clean Water</span><span class="sdg-tag">SDG 9 · Innovation</span></div>
+        <div class="tags"><span>Machine Learning</span><span>pH Sensing</span><span>Data Quality</span><span>Python</span><span>Sensor Analytics</span></div>
+      </div>
+      <div class="card reveal">
+        <span class="num">05</span>
+        <span class="award plain">Academic · S4 ML Project</span>
+        <h3>Comparative Analysis of ML Models — Spinal Disorder Classification</h3>
+        <p class="desc">Conducted a systematic comparative study of multiple supervised machine learning algorithms for classifying spinal disorders from biomechanical patient data. Evaluated model performance across accuracy, precision, recall, and F1 metrics to identify the most effective classifier for clinical decision-support applications.</p>
+        <div class="sdg-tags"><span class="sdg-tag">SDG 3 · Good Health</span></div>
+        <div class="tags"><span>Machine Learning</span><span>Classification</span><span>Biomedical</span><span>Python</span><span>Comparative Study</span><span>Scikit-learn</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">About</p>
+    <h2 class="sec-title reveal">Between hardware and <em>intelligence.</em></h2>
+    <div class="about-grid">
+      <div class="reveal">
+        <p>I'm an <strong>Electronics &amp; Instrumentation Engineering student</strong> at the Federal Institute of Science and Technology (FISAT), expected to graduate in 2028, with a track record in embedded systems development, machine learning applications, and professional graphic design.</p>
+        <p>As <strong>AI &amp; Autonomy Engineer, Media Lead, and Web Developer</strong> for the FISAT Rover Team, I helped engineer the autonomous navigation of our custom rover <strong>Dawn</strong> — a Finalist at the International Rover Challenge 2026 — while leading the team's brand and building its web platform.</p>
+        <p>I also serve as <strong>Design Lead of the IEEE Execom</strong> student chapter, directing visual identity and design strategy — bridging technical engineering functionality with sharp visual communication.</p>
+      </div>
+      <div class="facts reveal">
+        <div class="fact"><span class="k">Degree</span><span class="v">B.Tech EIE</span></div>
+        <div class="fact"><span class="k">Institute</span><span class="v">FISAT</span></div>
+        <div class="fact"><span class="k">Graduating</span><span class="v">2028</span></div>
+        <div class="fact"><span class="k">Hackathon wins</span><span class="v">2 × 1st</span></div>
+        <div class="fact"><span class="k">Rover challenge</span><span class="v">IRC '26 Finalist</span></div>
+        <div class="fact"><span class="k">SmartEarth '26</span><span class="v">Kazakhstan Finalist</span></div>
+        <div class="fact"><span class="k">Certifications</span><span class="v">7+</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Experience</p>
+    <h2 class="sec-title reveal">Where the work <em>happens.</em></h2>
+    <div class="xp">
+      <div class="xp-row reveal">
+        <div class="xp-when">June 2026</div>
+        <div>
+          <h3>Industrial Intern</h3>
+          <p class="xp-org">The Fertilisers and Chemicals Travancore Ltd (FACT)</p>
+          <p>Hands-on exposure to large-scale industrial instrumentation, continuous process automation, and heavy manufacturing plant operations.</p>
+          <p>Studied real-world deployment of field instruments, industrial control loops, and automation frameworks critical to chemical processing and safety systems.</p>
+          <div class="xp-cert-thumb card-cert-img">
+            <img src="FACT.jpg" alt="FACT Industrial Internship Certificate">
+            <span class="xp-cert-thumb-label"><strong>View Certificate</strong>FACT · Internship 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="xp-row reveal">
+        <div class="xp-when">Robotics Team</div>
+        <div>
+          <h3>AI &amp; Autonomy Engineer · Media Lead · Web Developer</h3>
+          <p class="xp-org">FISAT Rover Team — Rover "Dawn"</p>
+          <p>Engineered autonomous navigation sub-systems and integrated AI components, helping secure a Finalist spot at the International Rover Challenge (IRC) 2026.</p>
+          <p>Designed the official team web platform for international review, and spearheaded the Media &amp; Management division — branding, public relations, and visual communication.</p>
+        </div>
+      </div>
+      <div class="xp-row reveal">
+        <div class="xp-when">Current</div>
+        <div>
+          <h3>Design Lead</h3>
+          <p class="xp-org">IEEE Execom — Student Chapter · former Associate Designer</p>
+          <p>Direct visual identity and design strategy for the executive committee, managing conceptualisation and approval of high-impact promotional materials.</p>
+          <p>Collaborate with cross-functional event heads on rapid-turnaround digital media, print assets, and brand frameworks.</p>
+          <div class="xp-cert-thumb card-cert-img">
+            <img src="ieee.jpg" alt="IEEE Execom Design Lead">
+            <span class="xp-cert-thumb-label"><strong>View Photo</strong>IEEE Execom · Design Lead</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Capabilities</p>
+    <h2 class="sec-title reveal">The <em>toolkit.</em></h2>
+    <div class="skills reveal">
+      <div class="skill">
+        <h3>Programming</h3>
+        <ul><li>Python</li><li>C</li><li>HTML</li><li>SQL</li></ul>
+      </div>
+      <div class="skill">
+        <h3>Robotics &amp; Hardware</h3>
+        <ul><li>ROS — Robot Operating System</li><li>Gazebo</li><li>Arduino &amp; Microcontrollers</li><li>PLC Programming</li><li>Sensor Integration</li></ul>
+      </div>
+      <div class="skill">
+        <h3>ML &amp; Data Science</h3>
+        <ul><li>Data Processing</li><li>Regression Analysis</li><li>Computer Vision</li><li>Object Detection</li></ul>
+      </div>
+      <div class="skill">
+        <h3>Design &amp; Tools</h3>
+        <ul><li>Figma</li><li>Adobe Photoshop</li><li>Git</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Credentials</p>
+    <h2 class="sec-title reveal">Certified <em>&amp; verified.</em></h2>
+    <div class="certs">
+      <div class="cert reveal">
+        <div class="cert-img"><img src="PYTHON DATA.jpg" alt="Python for Data Science Certificate"></div>
+        <div class="cert-body"><b>Python for Data Science — Elite Certificate</b><span>NPTEL · IIT Madras · MoE, Govt. of India</span></div>
+      </div>
+      <div class="cert reveal">
+        <div class="cert-img"><img src="Joy python.jpg" alt="The Joy of Computing using Python"></div>
+        <div class="cert-body"><b>The Joy of Computing using Python</b><span>NPTEL · IIT Madras · MoE, Govt. of India</span></div>
+      </div>
+      <div class="cert reveal">
+        <div class="cert-img"><img src="Eyantra intro ros2.jpg" alt="Introduction to ROS2 Certificate"></div>
+        <div class="cert-body"><b>Introduction to ROS2 — Technical Session</b><span>e-Yantra, IIT Bombay · June 2025</span></div>
+      </div>
+      <div class="cert reveal">
+        <div class="cert-img"><img src="eyantra rtos.jpg" alt="RTOS Certificate"></div>
+        <div class="cert-body"><b>Real Time Operating Systems (RTOS) — Technical Session</b><span>e-Yantra, IIT Bombay · June 2025</span></div>
+      </div>
+      <div class="cert reveal">
+        <div class="cert-img"><img src="aws.jpg" alt="AWS Academy Cloud Foundations"></div>
+        <div class="cert-body"><b>AWS Academy Cloud Foundations</b><span>Amazon Web Services · Dec 2025</span></div>
+      </div>
+      <div class="cert reveal">
+        <div class="cert-img"><img src="sql advanced.png" alt="SQL Advanced Certificate"></div>
+        <div class="cert-body"><b>SQL — Advanced &amp; Intermediate</b><span>HackerRank Verified · Feb 2026</span></div>
+      </div>
+      <div class="cert reveal">
+        <div class="cert-img"><img src="nasscom.jpg" alt="NASSCOM Digital 101"></div>
+        <div class="cert-body"><b>Digital 101 — 30 Hours</b><span>NASSCOM · Apr 2025</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-inner">
+      <p class="sec-eyebrow reveal">Contact</p>
+      <h2 class="sec-title reveal">Let's build <em>something.</em></h2>
+      <p class="reveal">Open to internships, robotics collaborations, and design work. Email is the fastest channel.</p>
+      <div class="contact-cta reveal">
+        <a class="pill solid" href="mailto:salvionthomas23@gmail.com">salvionthomas23@gmail.com</a>
+        <a class="pill gold" href="tel:+918078566287">+91 80785 66287</a>
+        <a class="pill dim" href="https://www.linkedin.com/in/salvion-thomas-15a127278" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <span class="serif">Salvion Thomas.</span>
+    <span>Thrissur, Kerala — © 2026</span>
+  </div>
+</footer>
+
+<script>
+/* ---------- loader ---------- */
+(function(){
+  const loader=document.getElementById('loader');
+  const count=document.getElementById('loadCount');
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){loader.classList.add('done');return}
+  document.body.style.overflow='hidden';
+  let n=0;
+  const iv=setInterval(()=>{
+    n+=Math.floor(Math.random()*14)+6;
+    if(n>=100){n=100;clearInterval(iv);
+      setTimeout(()=>{loader.classList.add('done');document.body.style.overflow=''},450)}
+    count.textContent=n;
+  },110);
+})();
+
+/* ---------- starfield ---------- */
+(function(){
+  const c=document.getElementById('stars');
+  const ctx=c.getContext('2d');
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let w,h,stars=[];
+  function resize(){
+    w=c.width=c.offsetWidth*devicePixelRatio;
+    h=c.height=c.offsetHeight*devicePixelRatio;
+    stars=Array.from({length:Math.floor(w*h/26000)},()=>({
+      x:Math.random()*w,y:Math.random()*h,
+      r:(Math.random()*1.3+.3)*devicePixelRatio,
+      s:Math.random()*.35+.08,
+      p:Math.random()*Math.PI*2
+    }));
+  }
+  window.addEventListener('resize',resize);resize();
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const s of stars){
+      const tw=.45+.55*Math.sin(t*s.s*3+s.p);
+      ctx.globalAlpha=tw*.75;
+      ctx.fillStyle=Math.random()<.04?'#c9a35c':'#efe9dc';
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();
+      s.x+=s.s*.18*devicePixelRatio;
+      if(s.x>w)s.x=0;
+    }
+    ctx.globalAlpha=1;t+=0.016;
+    if(!reduced)requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ---------- scroll reveal ---------- */
+(function(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+  }),{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* ---------- lightbox ---------- */
+(function(){
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lightbox-img');
+  const lbCap=document.getElementById('lightbox-caption');
+  const lbClose=document.getElementById('lightbox-close');
+
+  function open(src,alt){
+    lbImg.src=src;
+    lbImg.alt=alt;
+    lbCap.textContent=alt;
+    lb.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function close(){
+    lb.classList.remove('open');
+    document.body.style.overflow='';
+    setTimeout(()=>{lbImg.src=''},350);
+  }
+
+  /* cert tiles */
+  document.querySelectorAll('.cert').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const img=el.querySelector('.cert-img img');
+      const title=el.querySelector('b');
+      if(img) open(img.src, title?title.textContent:'Certificate');
+    });
+  });
+
+  /* card-cert-img blocks */
+  document.querySelectorAll('.card-cert-img').forEach(el=>{
+    el.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const img=el.querySelector('img');
+      const lbl=el.querySelector('.cert-label');
+      if(img) open(img.src, lbl?lbl.textContent:img.alt);
+    });
+  });
+
+  lbClose.addEventListener('click',close);
+  lb.addEventListener('click',(e)=>{ if(e.target===lb) close(); });
+  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') close(); });
+})();
+</script>
+</body>
+</html>
